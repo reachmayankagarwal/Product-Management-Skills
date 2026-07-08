@@ -19,8 +19,8 @@ export default function HomePage() {
         <p className="lede">
           The thinking partner every product manager wishes they had on speed dial. Describe
           your situation in plain words and the CoPilot applies a proven consulting discipline
-          to it — separating symptoms from causes, forcing real trade-offs, committing to a
-          recommendation — and hands back a structured, stakeholder-ready deliverable in
+          to it: separating symptoms from causes, forcing real trade-offs, and committing to a
+          recommendation. It hands back a structured, stakeholder-ready deliverable in
           seconds. Twenty-one skills cover the full arc of a product decision, from framing
           the problem to proving the value landed.
         </p>
@@ -31,14 +31,14 @@ export default function HomePage() {
         <h2>How to use it</h2>
         <ol className="steps">
           <li>
-            <strong>Pick a skill.</strong> The vertical tabs are grouped by engagement phase —
-            start at Diagnose if you&apos;re at the beginning, or jump straight to the skill that
+            <strong>Pick a skill.</strong> The vertical tabs are grouped by engagement phase.
+            Start at Diagnose if you&apos;re at the beginning, or jump straight to the skill that
             matches where you&apos;re stuck.
           </li>
           <li>
             <strong>Drop your query.</strong> Paste real context: the situation, what you know,
             numbers, constraints, who&apos;s deciding. The more specific the input, the sharper
-            the output. Missing details are fine — the skill states its assumptions and proceeds.
+            the output. Missing details are fine; the skill states its assumptions and proceeds.
           </li>
           <li>
             <strong>Get the deliverable.</strong> The answer streams back in the skill&apos;s
@@ -47,8 +47,8 @@ export default function HomePage() {
           </li>
         </ol>
         <p className="chain-note">
-          The skills form a chain — <strong>Problem &rarr; Evidence &rarr; Options &rarr;
-          Recommendation &rarr; Roadmap &rarr; Value</strong> — so each output is designed to be
+          The skills form a chain, <strong>Problem &rarr; Evidence &rarr; Options &rarr;
+          Recommendation &rarr; Roadmap &rarr; Value</strong>, so each output is designed to be
           the next skill&apos;s input.
         </p>
       </section>
