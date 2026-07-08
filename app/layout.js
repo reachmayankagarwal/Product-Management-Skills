@@ -2,9 +2,9 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  title: "Product Manager's CoPilot",
+  title: "Product Manager's Assistant",
   description:
-    "Your consulting co-pilot: 21 skills that turn a PM's query into a client-ready deliverable.",
+    "Your consulting assistant: 21 skills that turn a PM's query into a client-ready deliverable.",
 };
 
 export default function RootLayout({ children }) {

@@ -15,10 +15,10 @@ export default function HomePage() {
     <div className="home">
       <section className="hero">
         <span className="phase-chip">21 skills · 6 phases</span>
-        <h1>Product Manager&apos;s CoPilot</h1>
+        <h1>Product Manager&apos;s Assistant</h1>
         <p className="lede">
           The thinking partner every product manager wishes they had on speed dial. Describe
-          your situation in plain words and the CoPilot applies a proven consulting discipline
+          your situation in plain words and the Assistant applies a proven consulting discipline
           to it: separating symptoms from causes, forcing real trade-offs, and committing to a
           recommendation. It hands back a structured, stakeholder-ready deliverable in
           seconds. Twenty-one skills cover the full arc of a product decision, from framing
