@@ -1,149 +1,88 @@
-"use client";
-
-import { useMemo, useRef, useState } from "react";
-import { marked } from "marked";
+import Link from "next/link";
 import { PHASES, SKILLS } from "../lib/skills";
 
-marked.setOptions({ breaks: true, gfm: true });
-
-const PLACEHOLDERS = {
-  Diagnose: "Describe the client situation, how the client frames it, and the business context...",
-  Analyze: "Paste the problem, question, and whatever data or observations you have...",
-  Synthesize: "Paste the problem, evidence, options, and constraints developed so far...",
-  Decide: "Paste the options, trade-offs, and what the decision-maker cares about...",
-  Execute: "Paste the approved recommendation, initiatives, people, and constraints...",
-  Measure: "Paste the recommendation, success criteria, business case, or delivery status...",
+const PHASE_TAGLINES = {
+  Diagnose: "Frame the real problem, the people, the targets, and the scope before any analysis.",
+  Analyze: "Map the evidence, test hypotheses, find root causes, and put a number on the problem.",
+  Synthesize: "Generate real options, expose trade-offs, stress-test assumptions, model futures.",
+  Decide: "Commit to one position, quantify the case, and land it in a one-page memo.",
+  Execute: "Sequence the roadmap, assign single owners, and surface delivery risks early.",
+  Measure: "Pick the KPIs that matter, track promised value, and capture the lessons.",
 };
 
-function renderMarkdown(text) {
-  // escape raw HTML so only markdown formatting renders
-  const escaped = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  return { __html: marked.parse(escaped) };
-}
-
-export default function Home() {
-  const [activeId, setActiveId] = useState(SKILLS[0].id);
-  const [query, setQuery] = useState("");
-  const [output, setOutput] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | streaming | error
-  const [error, setError] = useState("");
-  const abortRef = useRef(null);
-
-  const active = useMemo(() => SKILLS.find((s) => s.id === activeId), [activeId]);
-  const grouped = useMemo(
-    () => PHASES.map((p) => ({ phase: p, items: SKILLS.filter((s) => s.phase === p) })),
-    []
-  );
-
-  function selectSkill(id) {
-    abortRef.current?.abort();
-    setActiveId(id);
-    setOutput("");
-    setError("");
-    setStatus("idle");
-  }
-
-  async function run() {
-    if (!query.trim() || status === "loading" || status === "streaming") return;
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setOutput("");
-    setError("");
-    setStatus("loading");
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ skillId: activeId, query }),
-        signal: controller.signal,
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `Request failed (${res.status})`);
-      }
-      setStatus("streaming");
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let acc = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        acc += decoder.decode(value, { stream: true });
-        setOutput(acc);
-      }
-      setStatus("idle");
-    } catch (e) {
-      if (e.name === "AbortError") return;
-      setError(e.message);
-      setStatus("error");
-    }
-  }
-
+export default function HomePage() {
   return (
-    <div className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <h1>PM Consultant Skills</h1>
-          <p>21 skills. Pick one, drop your query, get a client-ready answer.</p>
+    <div className="home">
+      <section className="hero">
+        <span className="phase-chip">21 skills · 6 phases</span>
+        <h1>PM Consultant Skills</h1>
+        <p className="lede">
+          A consulting co-pilot for product managers. Each skill turns your messy, real-world
+          input into a structured, client-ready deliverable — a framed problem, a trade-off
+          matrix, an executive memo — following the disciplines from{" "}
+          <em>The Consultant&apos;s Guide to Claude</em>.
+        </p>
+        <Link href="/skills" className="cta">Open the portal &rarr;</Link>
+      </section>
+
+      <section className="how">
+        <h2>How to use it</h2>
+        <ol className="steps">
+          <li>
+            <strong>Pick a skill.</strong> The vertical tabs are grouped by engagement phase —
+            start at Diagnose if you&apos;re at the beginning, or jump straight to the skill that
+            matches where you&apos;re stuck.
+          </li>
+          <li>
+            <strong>Drop your query.</strong> Paste real context: the situation, what you know,
+            numbers, constraints, who&apos;s deciding. The more specific the input, the sharper
+            the output. Missing details are fine — the skill states its assumptions and proceeds.
+          </li>
+          <li>
+            <strong>Get the deliverable.</strong> The answer streams back in the skill&apos;s
+            fixed structure (each skill enforces its own quality gate), ready to paste into a
+            doc or deck. Then feed it into the next skill in the chain.
+          </li>
+        </ol>
+        <p className="chain-note">
+          The skills form a chain — <strong>Problem &rarr; Evidence &rarr; Options &rarr;
+          Recommendation &rarr; Roadmap &rarr; Value</strong> — so each output is designed to be
+          the next skill&apos;s input.
+        </p>
+      </section>
+
+      <section className="phases">
+        <h2>The six phases</h2>
+        <div className="phase-grid">
+          {PHASES.map((phase) => {
+            const items = SKILLS.filter((s) => s.phase === phase);
+            return (
+              <Link href="/skills" key={phase} className="phase-card">
+                <h3>{phase}</h3>
+                <p>{PHASE_TAGLINES[phase]}</p>
+                <ul>
+                  {items.map((s) => (
+                    <li key={s.id}>{s.title}</li>
+                  ))}
+                </ul>
+              </Link>
+            );
+          })}
         </div>
-        <nav>
-          {grouped.map(({ phase, items }) => (
-            <div key={phase} className="phase-group">
-              <div className="phase-label">{phase}</div>
-              {items.map((s) => (
-                <button
-                  key={s.id}
-                  className={`tab ${s.id === activeId ? "active" : ""}`}
-                  onClick={() => selectSkill(s.id)}
-                >
-                  <span className="tab-num">{s.num}</span>
-                  <span>{s.title}</span>
-                </button>
-              ))}
-            </div>
-          ))}
-        </nav>
-      </aside>
+      </section>
 
-      <main className="main">
-        <header className="skill-header">
-          <span className="phase-chip">{active.phase}</span>
-          <h2>{active.title}</h2>
-          <p>{active.blurb}</p>
-        </header>
-
-        <section className="query-box">
-          <textarea
-            value={query}
-            onKeyDown={(e) => {
-              if ((e.metaKey || e.ctrlKey) && e.key === "Enter") run();
-            }}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={PLACEHOLDERS[active.phase]}
-            rows={6}
-          />
-          <div className="actions">
-            <span className="hint">Cmd/Ctrl + Enter to run</span>
-            <button
-              className="run"
-              onClick={run}
-              disabled={!query.trim() || status === "loading" || status === "streaming"}
-            >
-              {status === "loading" || status === "streaming" ? "Working..." : "Run skill"}
-            </button>
-          </div>
-        </section>
-
-        <section className="output">
-          {status === "error" && <div className="error">{error}</div>}
-          {status === "loading" && <div className="loading">Thinking with {active.title}...</div>}
-          {output && <article dangerouslySetInnerHTML={renderMarkdown(output)} />}
-          {!output && status === "idle" && !error && (
-            <div className="empty">Output appears here.</div>
-          )}
-        </section>
-      </main>
+      <footer className="foot">
+        <p>
+          Powered by Groq · Skills source:{" "}
+          <a href="https://github.com/reachmayankagarwal/PM-Consultant-Skills">
+            PM-Consultant-Skills
+          </a>{" "}
+          · Portal code:{" "}
+          <a href="https://github.com/reachmayankagarwal/Product-Management-Skills">
+            Product-Management-Skills
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }
