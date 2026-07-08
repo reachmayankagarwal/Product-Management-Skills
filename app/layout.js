@@ -2,9 +2,9 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  title: "PM Consultant Skills",
+  title: "Product Manager's CoPilot",
   description:
-    "21 consulting skills for product managers — pick a skill, drop your query, get a client-ready answer.",
+    "Your consulting co-pilot: 21 skills that turn a PM's query into a client-ready deliverable.",
 };
 
 export default function RootLayout({ children }) {

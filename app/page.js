@@ -15,14 +15,16 @@ export default function HomePage() {
     <div className="home">
       <section className="hero">
         <span className="phase-chip">21 skills · 6 phases</span>
-        <h1>PM Consultant Skills</h1>
+        <h1>Product Manager&apos;s CoPilot</h1>
         <p className="lede">
-          A consulting co-pilot for product managers. Each skill turns your messy, real-world
-          input into a structured, client-ready deliverable — a framed problem, a trade-off
-          matrix, an executive memo — following the disciplines from{" "}
-          <em>The Consultant&apos;s Guide to Claude</em>.
+          The thinking partner every product manager wishes they had on speed dial. Describe
+          your situation in plain words and the CoPilot applies a proven consulting discipline
+          to it — separating symptoms from causes, forcing real trade-offs, committing to a
+          recommendation — and hands back a structured, stakeholder-ready deliverable in
+          seconds. Twenty-one skills cover the full arc of a product decision, from framing
+          the problem to proving the value landed.
         </p>
-        <Link href="/skills" className="cta">Open the portal &rarr;</Link>
+        <Link href="/skills" className="cta">Start with a skill &rarr;</Link>
       </section>
 
       <section className="how">

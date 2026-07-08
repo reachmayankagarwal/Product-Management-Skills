@@ -86,8 +86,8 @@ export default function Home() {
       <aside className="sidebar">
         <div className="brand">
           <Link href="/" className="home-link">&larr; Home</Link>
-          <h1>PM Consultant Skills</h1>
-          <p>21 skills. Pick one, drop your query, get a client-ready answer.</p>
+          <h1>Product Manager&apos;s CoPilot</h1>
+          <p>Pick a skill, describe your situation, get a stakeholder-ready deliverable.</p>
         </div>
         <nav>
           {grouped.map(({ phase, items }) => (
