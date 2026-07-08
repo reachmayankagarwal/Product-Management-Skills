@@ -76,8 +76,12 @@ export async function POST(req) {
             const data = trimmed.slice(5).trim();
             if (data === "[DONE]") continue;
             try {
-              const delta = JSON.parse(data).choices?.[0]?.delta?.content;
-              if (delta) controller.enqueue(encoder.encode(delta));
+              let delta = JSON.parse(data).choices?.[0]?.delta?.content;
+              if (delta) {
+                // enforce no long dashes in output regardless of model behavior
+                delta = delta.replace(/\s*\u2014\s*/g, ", ").replace(/\u2013/g, "-");
+                controller.enqueue(encoder.encode(delta));
+              }
             } catch {
               /* skip malformed chunk */
             }
